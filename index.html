@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulir Pesanan</title>
+    <!-- CSS internal -->
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f2f5;
+            color: #333;
+        }
+
+        .order-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        .order-form {
+            width: 100%;
+            max-width: 500px;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .order-form h2 {
+            margin-bottom: 20px;
+            font-size: 28px;
+            color: #4a90e2;
+            text-align: center;
+        }
+
+        .order-form label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .order-form input, 
+        .order-form select {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .order-form input:focus,
+        .order-form select:focus {
+            border-color: #4a90e2;
+            outline: none;
+        }
+
+        .order-form button {
+            width: 100%;
+            background: #4a90e2;
+            color: white;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+
+        .order-form button:hover {
+            background: #357abd;
+        }
+
+        .order-confirmation {
+            margin-top: 20px;
+            color: #28a745;
+            font-weight: bold;
+            text-align: center;
+            display: none;
+        }
+
+        .order-description {
+            max-width: 500px;
+            background-color: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            font-size: 16px;
+            color: #333;
+            line-height: 1.6;
+            text-align: center;
+        }
+
+        .order-description h3 {
+            color: #4a90e2;
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+
+        .order-description ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .order-description ul li {
+            margin-bottom: 10px;
+            font-size: 15px;
+        }
+
+        /* CSS untuk modal gambar */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            padding-top: 100px;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        .modal-content {
+            margin: auto;
+            display: block;
+            width: 80%;
+            max-width: 700px;
+        }
+
+        .modal-content, #caption {
+            animation: zoom 0.6s;
+        }
+
+        @keyframes zoom {
+            from {transform:scale(0)}
+            to {transform:scale(1)}
+        }
+
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #bbb;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="order-container">
+        <!-- Tambahkan elemen gambar di sini -->
+        <img id="productImage" src="gambar.png" alt="Gambar Produk" style="width:100%; max-width:500px; margin-bottom: 20px; cursor: pointer;">
+        
+        <!-- Modal untuk menampilkan gambar yang diperbesar -->
+        <div id="imageModal" class="modal">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <img class="modal-content" id="modalImage">
+        </div>
+
+        <div class="order-form">
+            <h2>Buat Pesanan Anda</h2>
+            <label for="name">Nama:</label>
+            <input type="text" id="name" placeholder="Masukkan nama Anda">
+        
+            <!-- Input untuk nomor WhatsApp -->
+            <label for="whatsapp">Nomor WhatsApp:</label>
+            <input type="tel" id="whatsapp" placeholder="Masukkan nomor WhatsApp Anda" pattern="[0-9]{10,15}" title="Masukkan nomor yang valid (10-15 digit)">
+
+            <label for="product">Pilih Produk:</label>
+            <select id="product">
+                <option value="Reseller Panel">Reseller Panel - Rp 10.000</option>
+                <option value="Owner Panel">Owner Panel - Rp 15.000</option>
+                <option value="Pt Panel">Pt Panel - Rp 20.000</option>
+                <option value="Pt Panel">Panel Ram 1gb 40cpu - Rp 1.000</option>
+                <option value="Pt Panel">Panel Ram 2gb 53cpu - Rp 2.000</option>  
+                <option value="Pt Panel">Panel Ram 3gb 64cpu - Rp 3.000</option>
+                <option value="Pt Panel">Panel Ram 4gb 73cpu - Rp 4.000</option>
+                <option value="Pt Panel">Panel Ram 5gb 85cpu - Rp 5.000</option>
+                <option value="Pt Panel">Panel Ram 7gb 93cpu - Rp 7.000</option>
+                <option value="Pt Panel">Pane Ram 8gb 105cpu - Rp 8.000</option>
+                <option value="Pt Panel">Panel Ram 9gb 110cpu - Rp 9.000</option>
+                <option value="Pt Panel">Panel Ram unli gb unli cpu - Rp 12.000</option>
+            </select>
+
+            <button onclick="submitOrder()">Pesan Sekarang</button>
+
+            <div class="order-confirmation" id="confirmation">
+                Pesanan Anda telah berhasil dibuat!
+            </div>
+        </div>
+
+        <!-- Bagian Deskripsi di Bawah -->
+        <div class="order-description">
+            <h3>Tentang Produk Kami</h3>
+            <p>Kami menyediakan berbagai panel berkualitas untuk kebutuhan bisnis Anda:</p>
+            <ul>
+                <li><strong>Reseller Panel</strong>: Ideal untuk reseller yang ingin menjual produk kami dengan harga yang kompetitif.</li>
+                <li><strong>Owner Panel</strong>: Cocok untuk pemilik bisnis yang ingin mengelola produk dan pelanggan dengan mudah.</li>
+                <li><strong>Pt Panel</strong>: Solusi terbaik untuk perusahaan yang membutuhkan fitur-fitur canggih dan pengelolaan skala besar.</li>
+            </ul>
+            <p>Pesan sekarang untuk mendapatkan produk terbaik dengan harga terjangkau dan layanan yang memuaskan.</p>
+        </div>
+    </div>
+
+    <!-- JavaScript internal -->
+    <script>
+        // Fungsi untuk memperbesar gambar saat diklik
+        var modal = document.getElementById("imageModal");
+        var img = document.getElementById("productImage");
+        var modalImg = document.getElementById("modalImage");
+
+        img.onclick = function() {
+            modal.style.display = "block";
+            modalImg.src = this.src;
+        }
+
+        // Fungsi untuk menutup modal
+        function closeModal() {
+            modal.style.display = "none";
+        }
+
+        function submitOrder() {
+            // Mengambil nilai dari input form
+            var name = document.getElementById('name').value;
+            var whatsapp = document.getElementById('whatsapp').value;
+            var product = document.getElementById('product').value;
+
+            // Validasi input
+            if (name === "" || whatsapp === "") {
+                alert("Harap isi semua bidang!");
+                return;
+            }
+
+            // Format pesan yang akan dikirim ke WhatsApp
+            var message = "Halo, saya " + name + ". Saya ingin memesan " + product + ". Nomor WhatsApp saya: " + whatsapp;
+
+            // Nomor WhatsApp Anda (masukkan nomor Anda dengan format internasional tanpa '+' atau '0' di depan, misalnya: 6283896866715)
+            var yourNumber = "6283896866715"; // <-- Masukkan nomor Anda di sini
+
+            // Membuka WhatsApp Web atau aplikasi WhatsApp dengan pesan yang sudah terisi
+            var whatsappUrl = "https://wa.me/" + yourNumber + "?text=" + encodeURIComponent(message);
+            window.open(whatsappUrl, '_blank');
+
+            // Menampilkan konfirmasi pesanan
+            document.getElementById('confirmation').style.display = 'block';
+        }
+    </script>
+</body>
+  </html>
